@@ -44,7 +44,7 @@ app.use("/api/theatres", theatreRouter);
 app.use("/api/shows", showRouter);
 app.use("/api/bookings", bookingRouter);
 
-app.get("/*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
 
