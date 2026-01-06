@@ -1,6 +1,19 @@
 const express = require("express");
-
+const path = require("path");
 const app = express();
+const cors = require("cors");
+
+const buildPath = path.join(__dirname, "../client/dist");
+app.use(express.static(buildPath));
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 require("dotenv").config();
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
@@ -30,6 +43,10 @@ app.use("/api/movies", movieRouter);
 app.use("/api/theatres", theatreRouter);
 app.use("/api/shows", showRouter);
 app.use("/api/bookings", bookingRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
